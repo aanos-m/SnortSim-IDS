@@ -1,23 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
+import LoginForm from './components/Login/LoginForm';
+import Header from './components/Utils/Header';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Client Side
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{display: 'flex', flexDirection: 'column'}}>
+      <Header/>
+      <LoginForm/>
     </div>
   );
 }

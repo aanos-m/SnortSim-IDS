@@ -1,12 +1,10 @@
 import './App.css';
-import LoginForm from './components/Login/LoginForm';
-import Header from './components/Utils/Header';
+import LoginScreen from './screens/LoginScreen';
 
 function App() {
   return (
-    <div style={{display: 'flex', flexDirection: 'column'}}>
-      <Header/>
-      <LoginForm/>
+    <div className='App'>
+      <LoginScreen/>
     </div>
   );
 }

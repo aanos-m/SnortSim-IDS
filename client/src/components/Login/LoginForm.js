@@ -1,6 +1,7 @@
 import React from 'react'
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { firebase } from '../../firebase'
 
 const LoginForm = () => {
 
@@ -9,28 +10,33 @@ const LoginForm = () => {
         password: Yup.string().required().min(8, 'Your password has to be atleast 8 characters')
     })
 
-    // const onLogin = async (email, password) => {
-    //     try{
-    //         await firebase.auth().signInWithEmailAndPassword(email, password)
-    //         console.log('firebase login succesful', email, password)
-    //     } catch (error) {
-    //         Alert.alert(error.message)
-    //     }
-    // }
-    
+    const inputStyle = {
+        display: 'flex',
+        padding: '10px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '10px',
+        alignSelf: 'stretch',
+        color: '#000',
+        fontFamily: 'Roboto',
+        fontSize: '20px',
+        borderRadius: 20,
+        border: 'none',
+        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)'
+    }
     return (
+        
         <Formik 
             validationSchema={loginFormSchema}
             initialValues={ { email: "", password: "" }}
+            validateOnMount={true}
             onSubmit={(values) => alert(JSON.stringify(values))}
-                //  onLogin(values.email, values.password)}
         >
             {( {handleBlur, handleChange, handleSubmit, values, errors, isValid, touched} ) => (
                 <div style={{
                     display: 'flex', flexDirection: 'column',
                     justifyContent: 'center', alignItems: 'center', alignSelf: 'center',
                     padding: '4px', margin: '4px',
-                    //  backgroundColor: 'blue'
                 }}>
                     {/* Passing handleSubmit parameter to html form onSubmit property */}
                     <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16}}>
@@ -43,19 +49,7 @@ const LoginForm = () => {
                             placeholder="Enter Email"
                             className="form-control inp_text"
                             id="email"
-                            style={{display: 'flex',
-                                padding: '10px',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                gap: '10px',
-                                alignSelf: 'stretch',
-                                color: '#000',
-                                fontFamily: 'Roboto',
-                                fontSize: '20px',
-                                borderRadius: 20,
-                                border: 'none',
-                                boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)'
-                            }}
+                            style={inputStyle}
                         />
                         {/* If validation is not passed show errors */}
 
@@ -72,22 +66,7 @@ const LoginForm = () => {
                             value={values.password}
                             placeholder="Enter password"
                             className="form-control"
-                            style={{display: 'flex',
-                                padding: '10px',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                gap: '10px',
-                                alignSelf: 'stretch',
-                                color: '#000',
-                                fontFamily: 'Roboto',
-                                fontSize: '20px',
-                                borderRadius: 20,
-                                border: 'none',
-                                stroke: 'none',
-                                outline: 'none',
-                                boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', 
-                                borderColor:  1 > values.password.length || values.password.length >= 6 ? 'blue' : 'red'
-                            }}
+                            style={inputStyle}
                         />
                         <style> 
                             {` 
@@ -121,5 +100,7 @@ const LoginForm = () => {
         </Formik>
     )
 }
+
+
 
 export default LoginForm

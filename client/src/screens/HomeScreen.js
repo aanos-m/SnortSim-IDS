@@ -37,6 +37,9 @@ const HomeScreen = () => {
   return (
     <div>
       <Header/>
+      <button onClick={handleLogout}>
+        Logout
+      </button>
       <ModuleCard/>
     </div>
   )

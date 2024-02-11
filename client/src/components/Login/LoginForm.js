@@ -1,103 +1,91 @@
-import React from 'react'
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { firebase } from '../../firebase'
+import React, {useState} from 'react';
+import {  signInWithEmailAndPassword   } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { useNavigate } from 'react-router-dom'
+
 
 const LoginForm = () => {
 
-    const loginFormSchema = Yup.object().shape({
-        email: Yup.string().email().required('An email is required'),
-        password: Yup.string().required().min(8, 'Your password has to be atleast 8 characters')
-    })
-
     const inputStyle = {
-        display: 'flex',
-        padding: '10px',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '10px',
-        alignSelf: 'stretch',
-        color: '#000',
-        fontFamily: 'Roboto',
-        fontSize: '20px',
-        borderRadius: 20,
-        border: 'none',
-        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)'
+        display: 'flex', justifyContent: 'center', alignItems: 'center', alignSelf: 'stretch', 
+        padding: '10px',gap: '10px', borderRadius: 20, border: 'none',
+        color: '#000', fontSize: '15px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', width: '400px'
     }
-    return (
-        
-        <Formik 
-            validationSchema={loginFormSchema}
-            initialValues={ { email: "", password: "" }}
-            validateOnMount={true}
-            onSubmit={(values) => alert(JSON.stringify(values))}
-        >
-            {( {handleBlur, handleChange, handleSubmit, values, errors, isValid, touched} ) => (
-                <div style={{
-                    display: 'flex', flexDirection: 'column',
-                    justifyContent: 'center', alignItems: 'center', alignSelf: 'center',
-                    padding: '4px', margin: '4px',
-                }}>
-                    {/* Passing handleSubmit parameter to html form onSubmit property */}
-                    <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16}}>
-                        <input
-                            type='email'
-                            name='email'
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.email}
-                            placeholder="Enter Email"
-                            className="form-control inp_text"
-                            id="email"
-                            style={inputStyle}
-                        />
-                        {/* If validation is not passed show errors */}
 
-                        {/* <p className="error">
-                            {errors.email && touched.email && errors.email}
-                        </p> */}
+    const logInBtn = { 
+        backgroundColor:'#00D816', color: 'white', justifyContent: 'center', alignItems: 'center', height: '35px', width: '100%', fontWeight: 'bold',
+        borderRadius: 20, fontSize: 20, border: 'none', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)'
+    }
 
-                        {/* Our input html with passing formik parameters like handleChange, values, handleBlur to input properties */}
-                        <input
-                            type="password"
-                            name="password"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.password}
-                            placeholder="Enter password"
-                            className="form-control"
-                            style={inputStyle}
-                        />
-                        <style> 
-                            {` 
-                                ::placeholder { 
-                                    color: '#9a9a9a'; 
-                                }` 
-                            } 
-                        </style> 
-                        {/* If validation is not passed show errors */}
+    const signUpBtn = { 
+        backgroundColor:'#FF0C0C', color: 'white', justifyContent: 'center', alignItems: 'center', height: '35px', width: '100%', fontWeight: 'bold',
+        borderRadius: 20, fontSize: 20, border: 'none', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', textDecoration: 'none'
+    }
 
-                        {/* <p className="error">
-                            {errors.password }
-                        </p> */}
+    const wrapper = {
+        display: 'flex', flexDirection: 'column', 
+        justifyContent: 'center', 
+    }
 
-                        {/* Click on submit button to submit the form */}
-                        <button type="submit"  onClick={() => console.log('login ')}
-                            style={{ backgroundColor:'#00D816', color: 'white', justifyContent: 'center', alignItems: 'center', height: '30px',
-                            borderRadius: 20, fontSize: 20, border: 'none', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)'}}>
+    const container = {
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', alignItems: 'center', alignSelf: 'center', 
+        padding: '20px', margin: '8px', gap: '8px', borderRadius: '20px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+        backgroundColor: '#dcdcdc'
+    }
 
-                            Login
-                        </button>
-                        <button type="submit"  onClick={() => console.log('acc create ')}
-                            style={{ backgroundColor:'#FF0C0C', color: 'white', justifyContent: 'center', alignItems: 'center', height: '30px',
-                            borderRadius: 20, fontSize: 20, border: 'none', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)'}}>
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+       
+    const onLogin = (e) => {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            navigate("/home")
+            console.log(user);
+        })
+        .catch((error) => {
+            alert('Please fill out all the fields')
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage)
+        });
+       
+    }
 
-                            Create Account
-                        </button>
-                    </form>
-                </div>
-            )}
-        </Formik>
+    return (                                                                         
+        <form style={wrapper}>                                              
+            <div style={container}>
+                <input
+                    id="email-address"
+                    placeholder="Email Address"
+                    name="email"
+                    type="email"                                    
+                    required                                                                                
+                    onChange={(e)=>setEmail(e.target.value)}
+                    style={inputStyle}
+                />
+                <input
+                    id="password"
+                    name="password"
+                    type="password"                                    
+                    required                                                                                
+                    placeholder="Password"
+                    onChange={(e)=>setPassword(e.target.value)}
+                    style={inputStyle}
+                />
+                <button onClick={onLogin} style={logInBtn}>      
+                    Login                                                                  
+                </button>
+                <span style={{ marginTop: '8px'}}>
+                    No account yet? {' '} 
+                </span>
+                <button onClick={() => navigate("/signup")}  style={signUpBtn} >Create Account</button>
+            </div>  
+        </form>                    
     )
 }
 

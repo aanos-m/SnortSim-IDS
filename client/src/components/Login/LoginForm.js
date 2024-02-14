@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {  signInWithEmailAndPassword   } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom'
+// import validator from 'email-validator'
 
 
 const LoginForm = () => {
@@ -9,7 +10,7 @@ const LoginForm = () => {
     const inputStyle = {
         display: 'flex', justifyContent: 'center', alignItems: 'center', alignSelf: 'stretch', 
         padding: '10px',gap: '10px', borderRadius: 20, border: 'none',
-        color: '#000', fontSize: '15px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', width: '400px'
+        color: '#000', fontSize: '15px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', width: '400px',
     }
 
     const logInBtn = { 
@@ -30,7 +31,7 @@ const LoginForm = () => {
     const container = {
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center', alignSelf: 'center', 
-        padding: '20px', margin: '8px', gap: '8px', borderRadius: '20px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+        padding: '20px', margin: '8px', gap: '16px', borderRadius: '20px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
         backgroundColor: '#dcdcdc'
     }
 
@@ -40,6 +41,13 @@ const LoginForm = () => {
        
     const onLogin = (e) => {
         e.preventDefault();
+
+        // Validate email before proceeding
+        // if (!validator.validate(email)) {
+        //     alert('Please enter a valid email address');
+        //     return;
+        // }
+
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in
@@ -80,7 +88,7 @@ const LoginForm = () => {
                 <button onClick={onLogin} style={logInBtn}>      
                     Login                                                                  
                 </button>
-                <span style={{ marginTop: '8px'}}>
+                <span style={{ marginTop: '20px'}}>
                     No account yet? {' '} 
                 </span>
                 <button onClick={() => navigate("/signup")}  style={signUpBtn} >Create Account</button>

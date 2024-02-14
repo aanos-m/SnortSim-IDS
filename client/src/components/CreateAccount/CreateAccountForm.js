@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {  createUserWithEmailAndPassword  } from 'firebase/auth';
 import { auth } from '../../firebase';
 
-
 const CreateAccountForm = () => {
 
   const inputStyle = {
@@ -20,7 +19,7 @@ const CreateAccountForm = () => {
   const container = {
     display: 'flex', flexDirection: 'column',
     justifyContent: 'center', alignItems: 'center', alignSelf: 'center', 
-    padding: '20px', margin: '8px', gap: '8px', borderRadius: '20px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+    padding: '20px', margin: '8px', gap: '16px', borderRadius: '20px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
     backgroundColor: '#dcdcdc'
   }
 
@@ -39,6 +38,7 @@ const CreateAccountForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('');
 
+
   const onSubmit = async (e) => {
     e.preventDefault()
    
@@ -51,7 +51,6 @@ const CreateAccountForm = () => {
           // ...
       })
       .catch((error) => {
-          alert('Please fill out all the fields')
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode, errorMessage);
@@ -70,22 +69,24 @@ const CreateAccountForm = () => {
             onChange={(e) => setEmail(e.target.value)}  
             required                                    
             placeholder="Email Address"  
-            style={inputStyle}                              
+            style={inputStyle}   
         />
+
         <input
             type="password"
             label="Create password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} 
+            onChange={(e) => setPassword(e.target.value)}
             required                                 
             placeholder="Password"           
             style={inputStyle}     
         />
+
         <button type="submit" onClick={onSubmit} style={logInBtn}>  
             Sign up                                
         </button>
 
-        <span style={{ marginTop: '8px'}}>                                    
+        <span style={{ marginTop: '20px'}}>                                    
           Already have an account?{' '}
         </span>
 

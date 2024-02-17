@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import {  createUserWithEmailAndPassword  } from 'firebase/auth';
+import '../../firebase'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { getFirestore, addDoc, collection } from "firebase/firestore"; 
+
 import { auth } from '../../firebase';
+
 
 const CreateAccountForm = () => {
 
@@ -10,6 +14,13 @@ const CreateAccountForm = () => {
     padding: '10px',gap: '10px', borderRadius: 20, border: 'none',
     color: '#000', fontSize: '15px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', width: '400px'
   } 
+
+  const dropDownStyle = {
+    display: 'flex', justifyContent: 'center', alignItems: 'center',
+    padding: '10px', borderRadius: 20, border: 'none',
+    fontSize: '15px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', width: '200px',
+  } 
+  
 
   const wrapper = {
     display: 'flex', flexDirection: 'column', 
@@ -34,34 +45,63 @@ const CreateAccountForm = () => {
 }
 
   const navigate = useNavigate();
- 
+  
+  const db = getFirestore();
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('');
-
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('')
 
   const onSubmit = async (e) => {
     e.preventDefault()
-   
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          console.log(user);
-          navigate("/home")
-          // ...
+    
+    try {
+      const authUser = await createUserWithEmailAndPassword(auth, email, password, name, role)
+      await updateProfile(authUser.user, { displayName: name })
+      
+      const docRef = await addDoc(collection(db, "userInfo"), {
+        owner_uid: authUser.user.uid,
+        email: email,
+        fullname: name,
+        role: role
       })
-      .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode, errorMessage);
-          // ..
-      });
+
+      if (docRef) {
+        navigate("/home")
+      }
+
+    } catch (error) {
+      console.log(error.code, error.message);
+      // ..
+    };
   }
 
 
   return (
     <form style={wrapper}>                                                                                            
       <div style={container}>
+        <div style={{display: 'flex', width: '100%', justifyContent: 'space-around', alignItems: 'center',}}>
+          <label style={{fontSize: '18px'}}>Choose your role </label>
+          <select name="role" id="role" onChange={(e) => setRole(e.target.value)} style={dropDownStyle}>
+            <option value="empty"/>
+            <option value="manager">Manager</option>
+            <option value="learner">Learner</option>
+          </select>
+        </div>
+      
+        <input
+            type="text"
+            id="name"
+            name="name"
+            required      
+            value={name}      
+            onChange={(e) => setName(e.target.value)}                          
+            placeholder="Full Name"
+            pattern="^(\w\w+)\s(\w+)$"  
+            style={inputStyle}   
+        />
+
         <input
             type="email"
             label="Email address"
@@ -69,7 +109,7 @@ const CreateAccountForm = () => {
             onChange={(e) => setEmail(e.target.value)}  
             required                                    
             placeholder="Email Address"  
-            style={inputStyle}   
+            style={inputStyle}       
         />
 
         <input
@@ -90,7 +130,7 @@ const CreateAccountForm = () => {
           Already have an account?{' '}
         </span>
 
-        <button onClick={() => navigate("/")}  style={signUpBtn} >Sign In</button>
+        <button onClick={() => navigate("/")}  style={signUpBtn} >Log In</button>
       </div> 
     </form>
   )

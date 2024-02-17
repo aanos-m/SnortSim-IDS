@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import {  signInWithEmailAndPassword   } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom'
-// import validator from 'email-validator'
-
 
 const LoginForm = () => {
 
@@ -41,12 +39,6 @@ const LoginForm = () => {
        
     const onLogin = (e) => {
         e.preventDefault();
-
-        // Validate email before proceeding
-        // if (!validator.validate(email)) {
-        //     alert('Please enter a valid email address');
-        //     return;
-        // }
 
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {

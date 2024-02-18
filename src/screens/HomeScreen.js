@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Utils/Header'
 import ModuleCard from '../components/Home/ModuleCard';
 
-
 const HomeScreen = () => {
 
   const upperContainer = { 
@@ -30,10 +29,10 @@ const HomeScreen = () => {
           // https://firebase.google.com/docs/reference/js/firebase.User
 
           setName(user.displayName)
+          console.log("logged in from home Screen", user)
 
         } else {
           // User is signed out
-          // ...
           console.log("user is logged out")
         }
       });
@@ -53,7 +52,7 @@ const HomeScreen = () => {
     <div>
       <Header/>
       <div style={upperContainer}>
-        <span style={{fontWeight: 'bold',}}> {getName}</span>
+        <span style={{fontWeight: 'bold'}}> {getName}</span>
         <button onClick={handleLogout}>
           Logout
         </button>

@@ -42,7 +42,7 @@ const CreateAccountForm = () => {
   const signUpBtn = { 
     backgroundColor:'#FF0C0C', color: 'white', justifyContent: 'center', alignItems: 'center', height: '35px', width: '100%', fontWeight: 'bold',
     borderRadius: 20, fontSize: 20, border: 'none', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', textDecoration: 'none'
-}
+  }
 
   const navigate = useNavigate();
   

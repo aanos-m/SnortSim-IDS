@@ -18,6 +18,15 @@ const HomeScreen = () => {
     padding: '10px', boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
     borderRadius: 15, alignItems: 'center',
   }
+  const logoutBtn = { 
+    backgroundColor:'#FF0C0C', 
+    color: 'white', 
+    padding :'8px', 
+    fontWeight: 'bolder', fontSize: '16px', 
+    borderRadius: 15, border: 'none', 
+    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)', 
+    textDecoration: 'none'
+  }
 
   const navigate = useNavigate();
   const [getName, setName] = useState('')
@@ -53,7 +62,7 @@ const HomeScreen = () => {
       <Header/>
       <div style={upperContainer}>
         <span style={{fontWeight: 'bold'}}> {getName}</span>
-        <button onClick={handleLogout}>
+        <button onClick={handleLogout} style={logoutBtn}>
           Logout
         </button>
       </div>

@@ -2,44 +2,49 @@ import React, { useEffect, useState } from 'react';
 import '../../firebase'
 import { auth , db } from '../../firebase'
 import { collection, query, where, getDocs } from "firebase/firestore";
-
+import ManagerModule from './ManagerModule';
+import LearnerModule from './LearnerModule';
 
 const ModuleCard = () => {
-  const [isManager, setIsManager] = useState(false);
+
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-
-      const q = query(collection(db, "userInfo"), where("owner_uid", "==", auth.currentUser.uid));
+    const fetchUserRole = async () => {
       try {
+        const q = query(collection(db, 'userInfo'), where('owner_uid', '==', auth.currentUser.uid));
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
-          if (doc.data().role === "manager"){
-            setIsManager(true)
+          if (doc.data().role === 'manager') {
+            setUserRole('manager');
           } else {
-            setIsManager(false)
+            setUserRole('learner');
           }
         });
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error('Error fetching user role: ', error);
       }
     };
 
-    // Call the async function to fetch data
-    if (auth.currentUser) {
-      fetchData();
-      console.log("from module card: ", auth.currentUser.uid)
-    }
+    // Listen for changes in authentication state
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // If user is authenticated, fetch user role
+        fetchUserRole();
+      } else {
+        // If user is not authenticated, reset user role
+        setUserRole(null);
+      }
+    });
+
+    // Clean up subscription
+    return () => unsubscribe();
   }, []);
 
   const funcManager = () => {
     return (
       <div>
-        <h1>Welcome Manager!</h1>
-        <button onClick={() => alert('module added ')}>Add Module</button>
-        <button onClick={() => alert('module delete ')}>Delete Module</button>
+        <ManagerModule/>
       </div>
     )
   }
@@ -48,7 +53,7 @@ const ModuleCard = () => {
     return (
       <div>
         {/* Content visible to other users */}
-        <h1>Welcome User!</h1>
+        <LearnerModule/>
       </div>
     )
   }
@@ -56,12 +61,12 @@ const ModuleCard = () => {
   // Render logic based on the user's role
   return (
     <div>
-      {isManager ? (
-        funcManager()
-      ) : (
-        funcLearner()
-      )}
-    </div>
+      { 
+        userRole === 'manager' ? funcManager() 
+        : userRole === 'learner' ? funcLearner() 
+        : null
+      }
+      </div>
   );
 };
 

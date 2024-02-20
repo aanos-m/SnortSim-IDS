@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom'
 
 const inputStyle = {
     display: 'flex', justifyContent: 'center', alignItems: 'center', width: '400px',
@@ -35,12 +35,13 @@ const moduleWrapper = {
     display: 'flex', flexDirection: 'column', 
     padding: '10px', margin: '5px', gap: '10px', 
     borderRadius: 20, boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
-    backgroundColor: '#fff', textWrap: 'wrap', width: '400px', 
+    backgroundColor: '#fff', textWrap: 'wrap', width: '400px', height: '250px'
 }
 
 
 const ManagerModule = () => {
     
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -51,7 +52,7 @@ const ManagerModule = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch("http://localhost:5000/data");
+            const response = await fetch("http://localhost:5000/modules");
             const data = await response.json();
             setData(data);
         } catch (error) {
@@ -98,7 +99,7 @@ const ManagerModule = () => {
                 <div style={inputWrapper}>
                         <h1>Welcome Manager!</h1>
 
-                        <input type="text" placeholder='Module Name/Number' value={name} onChange={(e) => setName(e.target.value)}  style={inputStyle}/>
+                        <input type="text" placeholder='Module Number' value={name} onChange={(e) => setName(e.target.value)}  style={inputStyle}/>
 
                         <textarea type="text" placeholder='Module Description' value={description} onChange={(e) => setDescription(e.target.value)} style={inputStyle}/>
 
@@ -111,10 +112,16 @@ const ManagerModule = () => {
                     
                     (
                         data.map(item => (
-                            <div key={item.id} style={{...moduleWrapper, fontSize: '16px'}}>
+                            <div key={item.id} style={{...moduleWrapper}}>
                                 <p style={{ fontSize: '20px', fontWeight: 'bold'}}> {item.name} </p>
-                                {item.description}  
-                                <button onClick={() => deleteModule(item.id)} style={delBtn}>Delete</button>
+                                <span style={{fontSize: '16px', overflowY: 'scroll', marginBottom: '4px', height: '150px'}}> {item.description} </span>
+                                <span style={{display: 'flex', flexDirection: 'row', gap: '8px'}}>
+
+                                    <button onClick={() => deleteModule(item.id)} style={delBtn}>Delete</button>
+                                    <button onClick={() => navigate(`/${item.name}` )} style={addBtn}>Open</button>
+
+                                </span>  
+                                
                             </div>
                         ))
                     ) : (

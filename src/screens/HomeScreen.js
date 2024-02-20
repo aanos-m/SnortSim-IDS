@@ -5,6 +5,7 @@ import {auth} from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Utils/Header'
 import ModuleCard from '../components/Home/ModuleCard';
+import Footer from '../components/Utils/Footer';
 
 const HomeScreen = () => {
 
@@ -58,7 +59,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <div>
+    <div >
       <Header/>
       <div style={upperContainer}>
         <span style={{fontWeight: 'bold'}}> {getName}</span>
@@ -68,6 +69,9 @@ const HomeScreen = () => {
       </div>
       <div style={lowerContainer}>
         <ModuleCard/>
+      </div>
+      <div style={{position: 'fixed', bottom: 0, width: '100%' }}>
+        <Footer/>
       </div>
       
     </div>

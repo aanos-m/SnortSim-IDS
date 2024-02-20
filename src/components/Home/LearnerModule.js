@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-
+import { useNavigate } from 'react-router-dom'
 
 const moduleContainer = { 
     display: 'flex', flexDirection: 'row', 
@@ -12,7 +12,7 @@ const moduleWrapper = {
     display: 'flex', flexDirection: 'column', 
     padding: '10px', margin: '5px', gap: '10px', 
     borderRadius: 20, boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
-    backgroundColor: '#fff', textWrap: 'wrap', width: '400px', 
+    backgroundColor: '#fff', textWrap: 'wrap', width: '400px', height: '250px'
 }
 
 const openModule = { 
@@ -31,6 +31,7 @@ const inputWrapper = {
 
 const LearnerModule = () => {
 
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -39,7 +40,7 @@ const LearnerModule = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch("http://localhost:5000/data");
+            const response = await fetch("http://localhost:5000/modules");
             const data = await response.json();
             setData(data);
         } catch (error) {
@@ -60,10 +61,15 @@ const LearnerModule = () => {
                     
                     (
                         data.map(item => (
-                            <div key={item.id} style={{...moduleWrapper, fontSize: '16px'}}>
+                            <div key={item.id} style={{...moduleWrapper}}>
                                 <p style={{ fontSize: '20px', fontWeight: 'bold'}}> {item.name} </p>
-                                {item.description}  
-                                <button onClick={() => alert(`take me to ${item.name} `)} style={openModule}>Open</button>
+                                <span style={{fontSize: '16px', overflowY: 'scroll', marginBottom: '4px', height: '150px'}}> {item.description} </span>
+                                <span style={{display: 'flex', flexDirection: 'row', gap: '8px'}}>
+
+                                    <button onClick={() => navigate(`/${item.name}` )} style={openModule}>Open</button>
+
+                                </span>  
+                                
                             </div>
                         ))
                     ) : (

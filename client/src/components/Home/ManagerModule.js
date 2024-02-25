@@ -52,7 +52,7 @@ const ManagerModule = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch("http://localhost:5000/modules");
+            const response = await fetch("http://localhost:3001/modules");
             const data = await response.json();
             setData(data);
         } catch (error) {
@@ -62,7 +62,7 @@ const ManagerModule = () => {
 
     const addModule = async () => {
         try {
-            const response = await fetch("http://localhost:5000/modules", {
+            const response = await fetch("http://localhost:3001/modules", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ const ManagerModule = () => {
 
     const deleteModule = async (moduleId) => {
         try {
-            const response = await fetch(`http://localhost:5000/modules/${moduleId}`, {
+            const response = await fetch(`http://localhost:3001/modules/${moduleId}`, {
                 method: 'DELETE'
             });
             const data = await response.json();

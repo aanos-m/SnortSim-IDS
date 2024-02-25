@@ -40,7 +40,7 @@ const LearnerModule = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch("http://localhost:5000/modules");
+            const response = await fetch("http://localhost:3001/modules");
             const data = await response.json();
             setData(data);
         } catch (error) {

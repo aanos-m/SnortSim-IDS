@@ -68,6 +68,10 @@ const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
+
+// const corsOptions = {
+//     origin: "http://127.0.0.1:3000",
+//   };
 const port = 3001;
 
 const db = new sqlite3.Database('modules.db'); // File-based SQLite database
